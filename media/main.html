@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head id="main_head">
+	<meta charset="UTF-8">
+
+	<!--
+		Use a content security policy to only allow loading styles from our extension directory,
+		and only allow scripts that have a specific nonce.
+		(See the 'webview-sample' extension sample for img-src content security policy examples)
+	-->
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>SLURM gen</title>
+	<style>
+		.placeholder_text {
+			font-style: italic;
+			font-family: system-ui;
+			color: rgb(145, 145, 145);
+			opacity: 100%;
+		}
+
+		.status_chip {
+			padding: 4px;
+			border-radius: 7px;
+			justify-content: center;
+			display: flex;
+			border-color: red;
+			border-width: 2px;
+			border-style: dashed;
+			align-self: stretch;
+			text-align: center;
+			font-weight: 700;
+			color: red;
+			font-style: italic;
+			background-color: rgba(255, 0, 0, .15);
+		}
+
+		.job_running_chip {
+			padding: 4px;
+			border-radius: 7px;
+			justify-content: center;
+			display: flex;
+			border-color: rgb(160, 160, 255);
+			border-width: 2px;
+			border-style: solid;
+			align-self: stretch;
+			text-align: center;
+			font-weight: 700;
+			color: rgb(160, 160, 255);
+			font-style: italic;
+			background-color: rgba(160, 160, 255, .15)
+		}
+
+		hr {
+
+			border: 0;
+			clear: both;
+			display: block;
+			width: 96%;
+			background-color: grey;
+			height: 2px;
+		}
+
+		.loading_chip {
+			padding: 4px;
+			border-radius: 7px;
+			justify-content: center;
+			display: flex;
+			border-color: grey;
+			border-width: 2px;
+			border-style: dashed;
+			align-self: stretch;
+			text-align: center;
+			font-weight: 700;
+			color: grey;
+			font-style: italic;
+			background-color: rgba(128, 128, 128, .15);
+		}
+
+		.connected_chip {
+			padding: 4px;
+			border-radius: 7px;
+			justify-content: center;
+			display: flex;
+			border-color: rgb(31, 189, 31);
+			border-width: 2px;
+			border-style: solid;
+			align-self: stretch;
+			text-align: center;
+			font-weight: 700;
+			color: rgb(31, 189, 31);
+			font-style: italic;
+			background-color: rgba(31, 189, 31, 0.15);
+		}
+
+		.section_delim {
+			border-radius: 6px;
+			border-width: 1px;
+			border-style: solid;
+			border-color: grey;
+			padding: 7px;
+			margin: 14px 0px;
+		}
+
+		button {
+			margin: 0px;
+		}
+
+		h2 {
+			margin: 0px !important;
+		}
+
+		::placeholder {
+			font-style: italic;
+			font-family: system-ui;
+			color: rgb(145, 145, 145);
+			opacity: 100%;
+		}
+
+
+
+		.flex_form {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			margin-top: 3px;
+			margin-bottom: 3px;
+			column-gap: 1.5ch;
+		}
+
+		.flex_vert {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+
+		.normal {
+			font-family: monospace;
+		}
+
+		ul.my_ul {
+			list-style: none;
+			font-family: monospace;
+			padding-left: 0px;
+		}
+
+		input[type=number]::-webkit-inner-spin-button,
+		input[type=number]::-webkit-outer-spin-button {
+
+			opacity: 1;
+
+		}
+
+
+
+		input[type=checkbox i] {
+			margin-right: 2px;
+			margin-bottom: 0px;
+			margin-top: 0px;
+		}
+
+
+		pre#preview_container {
+			border-width: 1px;
+			border-style: solid;
+			border-color: black;
+			border-radius: 1.5px;
+			padding: 6px;
+			color: navy;
+			font-weight: bold;
+			overflow-x: auto;
+		}
+
+		select {
+			width: 100%;
+			font-family: monospace;
+			background-color: var(--vscode-input-background);
+			padding-top: 6px;
+			padding-bottom: 6px;
+		}
+
+		div.time_marker {
+			font-family: monospace;
+			text-align: center;
+		}
+
+
+		.scroll_box {
+			height: 50px;
+			overflow: auto;
+			background-color: var(--vscode-input-background);
+			border-radius: 1.5px;
+			border-width: 1px;
+			border-color: black;
+			border-style: solid;
+			padding: 7px;
+		}
+
+		label {
+			font-size: calc(min(3.75vw, 11pt))
+		}
+	</style>
+
+</head>
+
+<body id="mainbody">
+	<!-- <script src="https://file+.vscode-resource.vscode-cdn.net/Users/druc594/Desktop/SLURM-gen/out/require.js"></script> -->
+
+	<title>SLURM GEN</title>
+	<div class="flex_form">
+		<div class="section_delim" style="margin: 0px 0px; width:70%">
+			<form id="ssh_form">
+				<h2>Account & Admin</h2>
+				<div class="flex_form">
+					<div class="flex_vert" style="width:70%">
+						<label>Username@Host:</label>
+						<input type="text" placeholder="username@login.node.host" id="username_at_host"
+							pattern="\w+@[\.\w]+" required>
+					</div>
+					<div class="flex_vert" style="width:30%">
+						<label>Port:</label>
+						<input type="text" value="22" id="ssh_port" required>
+					</div>
+				</div>
+				<!-- <div class="flex_form"> -->
+					<input type="submit" id="ssh_con_button" style="margin: 4px 0px" disabled="true" value="Connect To SSH">
+				<!-- </div> -->
+			</form>
+
+		</div>
+
+		<div class="status_chip" style="width:30%" id="status_message">
+			<div class="flex_form" style="font-size: calc(min(12pt, 2.5vw))">Status: Disconnected</div>
+		</div>
+	</div>
+	<form id="main_form">
+		<div class="section_delim">
+			<h2>Resource Selection</h2>
+			<div class="flex_form">
+				<div class="flex_vert" style="width:50%">
+					<label for="ptn">Partition:</label>
+					<select id="partition_drop_down" class="placeholder_text" required>
+						<option>Connect To SSH To View Partitions</option>
+					</select>
+				</div>
+				<div class="flex_vert" style="width:50%" required>
+					<label>SLURM Account:</label>
+					<input type="text" placeholder="my_slurm_account" id="account" required>
+				</div>
+			</div>
+			<label>Runtime Request:</label>
+			<div class="flex_form" style="column-gap: 0.25ch;">
+				<div class="runtime_input" style="width: 33.333%;">
+					<input id="form_hr" type="number" min=0 placeholder="hr" required>
+				</div>
+				<div class="time_marker">
+					:
+				</div>
+				<div class="runtime_input" style="width: 33.333%;">
+					<input id="form_min" type="number" min=0 placeholder="min" required>
+				</div>
+				<div class="time_marker">
+					:
+				</div>
+				<div class="runtime_input" style="width: 33.333%;">
+					<input id="form_sec" type="number" min=0 placeholder="sec" required>
+				</div>
+			</div>
+			<div class="flex_form">
+				<div class="flex_vert" style="width: 33.333%;">
+					<label for="n_tasks"># Tasks:</label>
+					<input type="number" min=1 value=1 id="n_tasks" required>
+				</div>
+				<div class="flex_vert" style="width: 33.333%;">
+					<label for="n_nodes"># Nodes:</label>
+					<input type="number" min=1 value=1 id="n_nodes" required>
+				</div>
+				<div class="flex_vert" style="width: 33.333%;">
+					<label for="tasks_per_node">CPUs/Task:</label>
+					<input type="number" min=1 value=1 id="cpus_per_task" required>
+				</div>
+			</div>
+			<div class="flex_form">
+				<div class="flex_vert" style="width:50%">
+					<label for="nodes_include_list">Request Node(s):</label>
+					<div class="scroll_box">
+						<ul id="nodes_include_list" class="my_ul">
+							<span class="placeholder_text">Choose Partition to Populate.</span>
+						</ul>
+					</div>
+				</div>
+				<div class="flex_vert" style="width:50%">
+					<label for="nodes_exclude_list">Exclude Node(s):</label>
+					<div class="scroll_box">
+						<ul id="nodes_exclude_list" class="my_ul">
+							<span class="placeholder_text">Choose Partition to Populate.</span>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="section_delim">
+			<h2>Execution Options & Submit</h2>
+			<label>Additional CLI Arguments:</label>
+			<input type="text" id="add_opts" placeholder="--optional --extra --SLURM --options"
+				style="font-family: monospace; overflow-x: auto">
+			<label>Execution Command:</label>
+			<input required type="text" id="execution_cmd"
+				value="module load apptainer && apptainer='/share/apps/apptainer/1.3.4/bin/apptainer shell --nv --writable --fakeroot tunneller-support-latest.sif"
+				style="font-family: monospace; overflow-x: auto">
+			<input type="submit" id="main_form_submit_button" value="Preview Configuration" style="margin: 4px 0px"
+				disabled="true">
+		</div>
+		</div>
+	</form>
+	<form id="submit_form">
+		<div class="preview_div_container">
+			<pre id="preview_container">Preview SLURM Command Will Appear Here.</pre>
+			<!-- <span style="font-size: 14pt; color: grey; font-style: italic;"> -->
+		</div>
+	</form>
+	<input type="submit" id="submit_job_button" value="Submit Job" style="margin: 4px 0px; font-weight: 700;">
+
+</body>
+
+</html>

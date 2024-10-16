@@ -1,0 +1,69 @@
+{
+	"name": "slurm-gen",
+	"description": "SLURM - A GUI for HPC Resources inside VS Code",
+	"version": "0.0.1",
+	"publisher": "Ben Drucker",
+	"private": true,
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-extension-samples"
+	},
+	"engines": {
+		"vscode": "^1.74.0"
+	},
+	"extensionKind": [
+		"ui",
+		"workspace"
+	],
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [],
+	"main": "./out/extension.js",
+	"contributes": {
+		"views": {
+			"explorer": [
+				{
+					"type": "webview",
+					"id": "slurm.main",
+					"name": "SLURM gen"
+				}
+			]
+		},
+		"commands": []
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"lint": "eslint \"src/**/*.ts\"",
+		"watch": "tsc -w -p ./",
+		"test": "vscode-test"
+	},
+	"devDependencies": {
+		"@types/jsdom": "^21.1.7",
+		"@types/node": "^22.7.4",
+		"@types/ssh2": "^1.15.1",
+		"@types/vscode": "^1.73.0",
+		"@typescript-eslint/eslint-plugin": "^7.14.0",
+		"@typescript-eslint/parser": "^7.14.0",
+		"@vscode/test-cli": "^0.0.10",
+		"@vscode/test-electron": "^2.4.1",
+		"eslint": "^8.32.0",
+		"typescript": "^5.5.2",
+		"vscode-test": "^1.6.1"
+	},
+	"dependencies": {
+		"browserify": "^17.0.1",
+		"jsdom": "^25.0.1",
+		"node": "22.6",
+		"node-ssh": "^13.2.0",
+		"requirejs": "^2.3.7",
+		"ssh2": "^1.16.0",
+		"undici-types": "^6.19.8"
+	},
+	"compilerOptions": {
+		"noImplicitAny": false
+	},
+	"type": "commonjs"
+}
