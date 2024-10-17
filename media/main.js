@@ -102,12 +102,12 @@
             switch (true) {
                 case /incl_node_.+/.test(target.id):
                     if (target.checked) {
-                        selected_include_nodes = selected_include_nodes.concat([target.id])
+                        selected_include_nodes = selected_include_nodes.concat([target.id.split("incl_node_")[1]])
                     }
                     break
                 case /excl_node_.+/.test(target.id):
                     if (target.checked) {
-                        selected_exclude_nodes = selected_exclude_nodes.concat([target.id])
+                        selected_exclude_nodes = selected_exclude_nodes.concat([target.id.split("excl_node_")[1]])
                     }
                     break
             }
@@ -128,22 +128,35 @@
         let mmm = String(mm).padStart(2, "0")
         let sss = String(ss).padStart(2, "0")
 
-        let template = `srun --ntasks=${n_tasks} --cpus-per-task=${cpus_per_task} --nodes=${n_nodes} --time=${hhh}:${mmm}:${sss} --partition=${partition} --account=${account}${exclude_string}${include_string} ${add_opts}`;
-        let arr = template.split(" ");
-        let arr_slashes = [];
-        for (let elt of arr) {
-            arr_slashes = arr_slashes.concat(`${elt}${" ".repeat(39 - elt.length)}\\`)
+        function make_template_str(hide) {
+            if (!hide) {
+                var template = `srun --ntasks=${n_tasks} --cpus-per-task=${cpus_per_task} --nodes=${n_nodes} --time=${hhh}:${mmm}:${sss} --partition=${partition} --account=${account}${exclude_string}${include_string} ${add_opts}`;
+            } else {
+                var template = `srun --ntasks=${n_tasks} --cpus-per-task=${cpus_per_task} --nodes=${n_nodes} --time=${hhh}:${mmm}:${sss} --partition=*** --account=*** --exclude=*** ${add_opts}`;
+            }
+
+            let arr = template.split(" ");
+            let arr_slashes = [];
+            for (let elt of arr) {
+                arr_slashes = arr_slashes.concat(`${elt}${" ".repeat(39 - elt.length)}\\`)
+            }
+            return arr_slashes
         }
 
+        var arr_slashes = make_template_str(false)
         arr_slashes = arr_slashes.concat(execution_cmd)
         let joined = arr_slashes.join("<br>")
-        template = arr_slashes.join("\n")
+        var template = arr_slashes.join("\n")
+        full_slurm_cmd = template;
+
 
         let container = document.getElementById("preview_container")
         if (container) {
+            arr_slashes = make_template_str(true)
+            arr_slashes = arr_slashes.concat(execution_cmd)
+            joined = arr_slashes.join("<br>")
             container.innerHTML = joined
         }
-        full_slurm_cmd = template;
         submit_button.style.background = "var(--vscode-button-background)"
         submit_button.style.color = "var(--vscode-button-foreground)"
     }
@@ -174,6 +187,7 @@
             console.log(part);
             add_options = add_options.concat([`<option>${part}</option>`]);
         }
+        partition_drop_down.style['-webkit-text-security'] = 'disc'
         var new_inner_html = add_options.join("\n");
         var selectedOption = Object.keys(p2n).sort()[0];
         partition_drop_down.innerHTML = new_inner_html;
@@ -183,8 +197,8 @@
             var relevant_node_inputs_incl = [];
             var relevant_node_inputs_excl = [];
             for (let rn of relevant_nodes) {
-                relevant_node_inputs_incl = relevant_node_inputs_incl.concat([`<input type="checkbox" id="incl_node_${rn.title}">${rn.title}</input>`]); // (${rn.architecture})
-                relevant_node_inputs_excl = relevant_node_inputs_excl.concat([`<input type="checkbox" id="excl_node_${rn.title}">${rn.title}</input>`]); // (${rn.architecture})
+                relevant_node_inputs_incl = relevant_node_inputs_incl.concat([`<input type="checkbox" id="incl_node_${rn.title}"><span style = "-webkit-text-security: disc">${rn.title}</span> </input>`]); // (${rn.architecture})
+                relevant_node_inputs_excl = relevant_node_inputs_excl.concat([`<input type="checkbox" id="excl_node_${rn.title}"><span style = "-webkit-text-security: disc">${rn.title}</span> </input>`]); // (${rn.architecture})
             }
             nodes_include_list.innerHTML = relevant_node_inputs_incl.join("<br>");
             nodes_exclude_list.innerHTML = relevant_node_inputs_excl.join("<br>");

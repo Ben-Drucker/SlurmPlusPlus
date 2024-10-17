@@ -17,8 +17,8 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.window.registerWebviewViewProvider(SLURMView.viewType, provider));
 
-	the_output_channel = vscode.window.createOutputChannel('SLURM Gen');
-	the_output_channel.appendLine("Welcome to SLURM gen.")
+	the_output_channel = vscode.window.createOutputChannel('SLURM++');
+	the_output_channel.appendLine("Welcome to SLURM++.")
 	the_output_channel.show();
 
 }
@@ -74,6 +74,7 @@ class SLURMView implements vscode.WebviewViewProvider {
 			this.ssh_handle.execCommand(cmd, {
 				onStdout(result) { the_output_channel.appendLine(result.toString('utf-8')) },
 				onStderr(result) {
+					the_output_channel.appendLine(result.toString('utf-8'))
 					if (result.toString('utf-8').match(queued_regex)) {
 						if (outer_view) {
 							outer_view.webview.postMessage({ 'slurm_response': "queued" })

@@ -27,7 +27,7 @@
 				{
 					"type": "webview",
 					"id": "slurm.main",
-					"name": "SLURM gen"
+					"name": "SLURM++"
 				}
 			]
 		},
