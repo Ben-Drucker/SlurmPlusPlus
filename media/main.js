@@ -102,12 +102,12 @@
             switch (true) {
                 case /incl_node_.+/.test(target.id):
                     if (target.checked) {
-                        selected_include_nodes = selected_include_nodes.concat([target.id])
+                        selected_include_nodes = selected_include_nodes.concat([target.id.split("incl_node_")[1]])
                     }
                     break
                 case /excl_node_.+/.test(target.id):
                     if (target.checked) {
-                        selected_exclude_nodes = selected_exclude_nodes.concat([target.id])
+                        selected_exclude_nodes = selected_exclude_nodes.concat([target.id.split("excl_node_")[1]])
                     }
                     break
             }

@@ -1,8 +1,8 @@
 {
-	"name": "slurm-gen",
-	"description": "SLURM - A GUI for HPC Resources inside VS Code",
-	"version": "0.0.1",
-	"publisher": "Ben Drucker",
+	"name": "SLURMPlusPlus",
+	"description": "SLURM++ - A GUI for HPC Resources inside VS Code",
+	"version": "0.1.0",
+	"publisher": "slurmtools",
 	"private": true,
 	"license": "MIT",
 	"repository": {
@@ -27,7 +27,7 @@
 				{
 					"type": "webview",
 					"id": "slurm.main",
-					"name": "SLURM gen"
+					"name": "SLURM++"
 				}
 			]
 		},
