@@ -1,15 +1,16 @@
 # Welcome to SLURM++!
 
-## Installation:
+## Installation (of dev container on HPC cluster):
 
 ### Prerequisites:
 
-- `apptainer` loaded — typically by running `module load apptainer`.
+- `apptainer` on HPC cluster
 - VS Code (most recent version)
 
 ### Steps:
-- Login to HPC "login" node
-- Run `source <(curl -s "https://raw.githubusercontent.com/Ben-Drucker/slurm-gen-internal/refs/heads/main/build_and_nvidia_script.sh?token=GHSAT0AAAAAACTQF4TQOQRUCC5WY5RJVG6IZYRQF6A")`. This will do the following:
+- Login to (SSH into) HPC "login" node.
+- Load `apptainer` — typically by running `module load apptainer`.
+- Run `source <(curl -s "https://raw.githubusercontent.com/Ben-Drucker/slurm-gen-internal/refs/heads/main/build_and_nvidia_script.sh?token=GHSAT0AAAAAACTQF4TQOQRUCC5WY5RJVG6IZYRQF6A")`. This will do the following **automatically**:
   - Download `tunneller-support` container
   - Build the container to a `.sif` file
   - Install Nvidia drivers (See troubleshooting section if Nvidia drivers not found)

@@ -1,14 +1,9 @@
 {
 	"name": "SLURMPlusPlus",
 	"description": "SLURM++ - A GUI for HPC Resources inside VS Code",
-	"version": "0.1.0",
+	"version": "0.1.2",
 	"publisher": "slurmtools",
-	"private": true,
-	"license": "MIT",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/Microsoft/vscode-extension-samples"
-	},
+	"private": false,
 	"engines": {
 		"vscode": "^1.74.0"
 	},
