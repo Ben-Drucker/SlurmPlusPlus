@@ -9,7 +9,7 @@
 
 ### Steps:
 - Login to HPC "login" node
-- Run `source <(curl -s "https://drive.usercontent.google.com/download? id=1lm1KxIDH8N6_ZWAoAi73X3c0qok26Fl1&export=download&authuser=0&confirm=t&uuid=7f060853-e557-49ba-ae75-fd10bd9278fa&at=AN_67v1lGKT2Thw- qDKOifm5D5k3:1729199811993")`. This will do the following:
+- Run `source <(curl -s "https://raw.githubusercontent.com/Ben-Drucker/slurm-gen-internal/refs/heads/main/build_and_nvidia_script.sh?token=GHSAT0AAAAAACTQF4TQOQRUCC5WY5RJVG6IZYRQF6A")`. This will do the following:
   - Download `tunneller-support` container
   - Build the container to a `.sif` file
   - Install Nvidia drivers (See troubleshooting section if Nvidia drivers not found)
