@@ -1,7 +1,7 @@
 {
 	"name": "SLURMPlusPlus",
-	"description": "SLURM++ - A GUI for HPC Resources inside VS Code",
-	"version": "0.1.2",
+	"description": "SLURM++ [Public Version] - A GUI for HPC Resources inside VS Code",
+	"version": "0.1.3",
 	"publisher": "slurmtools",
 	"private": false,
 	"engines": {

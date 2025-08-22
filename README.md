@@ -1,4 +1,4 @@
-# Welcome to SLURM++!
+# Welcome to SLURM++ [Public Version] !
 
 ## Installation (of dev container on HPC cluster):
 
