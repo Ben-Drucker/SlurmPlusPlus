@@ -1,9 +1,13 @@
 {
 	"name": "slurm-plus-plus",
 	"icon": "./SlurmPlusPlusIcon.png",
-	"description": "SLURM++ [Public Version] - A GUI for HPC Resources inside VS Code",
-	"version": "0.2.0",
+	"description": "SLURM++ ⎸ A GUI for HPC Resources inside VS Code",
+	"version": "0.2.2",
 	"publisher": "slurmtools",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Ben-Drucker/slurm-gen-internal"},
+	"license": "AGPL-3.0-only",
 	"private": false,
 	"engines": {
 		"vscode": "^1.103.0"
@@ -24,7 +28,7 @@
 					"type": "webview",
 					"id": "slurm.main",
 					"name": "SLURM++",
-					"icon": "SlurmPlusPlusIcon.png"
+					"icon": "spp-strokes.svg"
 				}
 			]
 		},
