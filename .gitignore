@@ -195,3 +195,6 @@ $RECYCLE.BIN/
 .history/
 
 # End of https://mrkandreev.name/snippets/gitignore-generator/#Node,Linux,macOS,Windows,VisualStudioCode
+
+**/*.vsix
+**/*-lock.json
