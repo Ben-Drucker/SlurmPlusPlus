@@ -33,3 +33,4 @@ Run the shell commands:
 - `npm install`
 - `npm install -g @vscode/vsce`
 - `vsce package`
+<!-- `vsce publish`>
