@@ -15,6 +15,7 @@ C. Another challenge for developers is using HPC resources for development itsel
 <p align="center">
   <img src="extras/GUI_screenshot.png" alt="Screenshot of GUI interface in VS Code" width="66.67%"/>
 </p>
+
 - Simulates a virtual machine with root access through [VS Code tunnelling](https://code.visualstudio.com/docs/remote/tunnels). This repository includes a script to install a docker container image "dev container". This runs on top of HPC hardware through `apptainer`, a docker-like engine that is common on HPC systems. Developers can use this, along with the `--fake-root` option, to simulate a virtual environment with elevated privleges.
 
 ## Schematic overview of the typical workflow (See `extras/schematic.png` for the full, final static image)
