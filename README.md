@@ -16,7 +16,7 @@ C. Another challenge for developers is using HPC resources for development itsel
 
 ## Schematic overview of the typical workflow
 
-![Schematic overview of SLURM++ workflow](extras/schematic.mov)
+![Schematic overview of SLURM++ workflow](extras/schematic.mp4)
 
 ## Installation & typical usage workflow
 
