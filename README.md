@@ -45,6 +45,13 @@ C. Another challenge for developers is using HPC resources for development itsel
   - Install Nvidia drivers (See troubleshooting section if Nvidia drivers not found)
 
 
+## Docker Image Details:
+
+The docker image used in this extension can be found on dockerhub: [https://hub.docker.com/repository/docker/benndrucker/tunneller-support/general](https://hub.docker.com/repository/docker/benndrucker/tunneller-support/general). It is built for `linux/amd64` and `linux/arm64` architectures. The image includes the following preinstalled software (summarized):
+
+
+The dockerfiles used to build this image can be found in `extras/dockerfiles`. TODO
+
 ## Troubleshooting:
 
 - Before continuing, ensure your version of VS Code is up to date.
