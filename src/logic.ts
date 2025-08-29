@@ -77,7 +77,7 @@ export async function populate_parts_and_nodes(p2n: { [key: string]: Array<NodeI
     var relevant_nodes = p2n[selectedOption]
     var relevant_node_inputs: Array<string> = []
     for (let rn of relevant_nodes) {
-        relevant_node_inputs = relevant_node_inputs.concat([`<input type="checkbox"><span style = "-webkit-text-security: disc">${rn.title}</span> (${rn.partitions})</input>`])
+        relevant_node_inputs = relevant_node_inputs.concat([`<input type="checkbox">${rn.title} (${rn.partitions})</input>`])
     }
     nodes_include_list.innerHTML = relevant_node_inputs.join("")
     nodes_exclude_list.innerHTML = relevant_node_inputs.join("")

@@ -1,5 +1,17 @@
 //@ts-check
 
+
+/**
+ * @param {any} [value]
+ * @param {string} [message]
+ */
+function assertNonNull(value, message) {
+    if (value === null || value === undefined) {
+        throw new Error(message ?? "Unexpected null or undefined value");
+    }
+    return value;
+}
+
 (function () {
     // @ts-ignore
     var vscode = acquireVsCodeApi();
@@ -32,10 +44,13 @@
     }
 
 
-    var button = document.getElementById("ssh_con_button")
-    var status_message = document.getElementById("status_message");
+    var check_status_message = document.getElementById("status_message");
+    if (!(check_status_message instanceof HTMLElement)) { throw new Error("Not an HTMLElement"); }
+    var status_message = check_status_message;
 
     function ssh_submit(X) {
+        let button = document.getElementById("ssh_con_button")
+        if (!(button instanceof HTMLButtonElement)) { throw new Error("Not an HTMLButtonElement"); }
         if (button && !button.disabled) {
             vscode.postMessage({ command: 'do_ssh_connection', ssh_options: parse_ssh_form(X) });
             if (status_message) {
@@ -45,14 +60,16 @@
         }
     }
 
-    var submit_button = document.getElementById("submit_job_button")
-    if (submit_button) {
-        submit_button.addEventListener('click', () => {
+    var submit_button_to_check = document.getElementById("submit_job_button")
+    if (!(submit_button_to_check instanceof HTMLButtonElement)) { throw new Error("Not an HTMLButtonElement"); }
+    if (submit_button_to_check) {
+        submit_button_to_check.addEventListener('click', () => {
             if (full_slurm_cmd != "") {
                 vscode.postMessage({ command: "do_submit_job", cmd_text: full_slurm_cmd })
             }
         })
     }
+    const submit_button = submit_button_to_check;
 
     var hh;
     var mm;
@@ -128,35 +145,22 @@
         let mmm = String(mm).padStart(2, "0")
         let sss = String(ss).padStart(2, "0")
 
-        function make_template_str(hide) {
-            if (!hide) {
-                var template = `srun --ntasks=${n_tasks} --cpus-per-task=${cpus_per_task} --nodes=${n_nodes} --time=${hhh}:${mmm}:${sss} --partition=${partition} --account=${account}${exclude_string}${include_string} ${add_opts}`;
-            } else {
-                var template = `srun --ntasks=${n_tasks} --cpus-per-task=${cpus_per_task} --nodes=${n_nodes} --time=${hhh}:${mmm}:${sss} --partition=*** --account=*** --exclude=*** ${add_opts}`;
-            }
-
-            let arr = template.split(" ");
-            let arr_slashes = [];
-            for (let elt of arr) {
-                arr_slashes = arr_slashes.concat(`${elt}${" ".repeat(39 - elt.length)}\\`)
-            }
-            return arr_slashes
+        let template = `srun --ntasks=${n_tasks} --cpus-per-task=${cpus_per_task} --nodes=${n_nodes} --time=${hhh}:${mmm}:${sss} --partition=${partition} --account=${account}${exclude_string}${include_string} ${add_opts}`;
+        let arr = template.split(" ");
+        let arr_slashes = [];
+        for (let elt of arr) {
+            arr_slashes = arr_slashes.concat(`${elt}${" ".repeat(39 - elt.length)}\\`)
         }
 
-        var arr_slashes = make_template_str(false)
         arr_slashes = arr_slashes.concat(execution_cmd)
         let joined = arr_slashes.join("<br>")
-        var template = arr_slashes.join("\n")
-        full_slurm_cmd = template;
-
+        template = arr_slashes.join("\n")
 
         let container = document.getElementById("preview_container")
         if (container) {
-            arr_slashes = make_template_str(true)
-            arr_slashes = arr_slashes.concat(execution_cmd)
-            joined = arr_slashes.join("<br>")
             container.innerHTML = joined
         }
+        full_slurm_cmd = template;
         submit_button.style.background = "var(--vscode-button-background)"
         submit_button.style.color = "var(--vscode-button-foreground)"
     }
@@ -187,7 +191,6 @@
             console.log(part);
             add_options = add_options.concat([`<option>${part}</option>`]);
         }
-        partition_drop_down.style['-webkit-text-security'] = 'disc'
         var new_inner_html = add_options.join("\n");
         var selectedOption = Object.keys(p2n).sort()[0];
         partition_drop_down.innerHTML = new_inner_html;
@@ -197,8 +200,8 @@
             var relevant_node_inputs_incl = [];
             var relevant_node_inputs_excl = [];
             for (let rn of relevant_nodes) {
-                relevant_node_inputs_incl = relevant_node_inputs_incl.concat([`<input type="checkbox" id="incl_node_${rn.title}"><span style = "-webkit-text-security: disc">${rn.title}</span> </input>`]); // (${rn.architecture})
-                relevant_node_inputs_excl = relevant_node_inputs_excl.concat([`<input type="checkbox" id="excl_node_${rn.title}"><span style = "-webkit-text-security: disc">${rn.title}</span> </input>`]); // (${rn.architecture})
+                relevant_node_inputs_incl = relevant_node_inputs_incl.concat([`<input type="checkbox" id="incl_node_${rn.title}">${rn.title}</input>`]); // (${rn.architecture})
+                relevant_node_inputs_excl = relevant_node_inputs_excl.concat([`<input type="checkbox" id="excl_node_${rn.title}">${rn.title}</input>`]); // (${rn.architecture})
             }
             nodes_include_list.innerHTML = relevant_node_inputs_incl.join("<br>");
             nodes_exclude_list.innerHTML = relevant_node_inputs_excl.join("<br>");
@@ -214,13 +217,28 @@
 
     window.addEventListener("message", async function (event) {
         if ('p2n' in event['data']) {
+            let part_dd_check = document.getElementById("partition_drop_down")
+            let nodes_incl_check = document.getElementById("nodes_include_list")
+            let nodes_excl_check = document.getElementById("nodes_exclude_list")
+            if (!(part_dd_check instanceof HTMLSelectElement)) { throw new Error("Not an HTMLSelectElement"); }
+            if (!(nodes_incl_check instanceof HTMLElement)) {
+                throw new Error("Not an HTMLElement");
+            }
+            if (!(nodes_excl_check instanceof HTMLElement)) {
+                throw new Error("Not an HTMLElement");
+            }
+            let part_dd = part_dd_check
+            let nodes_incl = nodes_incl_check
+            let nodes_excl = nodes_excl_check
+
             populate_parts_and_nodes(
                 event['data']['p2n'],
-                document.getElementById("partition_drop_down"),
-                document.getElementById("nodes_include_list"),
-                document.getElementById("nodes_exclude_list")
+                part_dd,
+                nodes_incl,
+                nodes_excl
             )
         } else {
+            if (!(status_message instanceof HTMLElement)) { throw new Error("Not an HTMLElement"); }
             if ('slurm_response' in event['data']) {
                 if (event['data']['slurm_response'] == "queued") {
                     status_message.className = "loading_chip"
@@ -248,7 +266,9 @@
             status_message.innerHTML = `<div class="flex_form" style="font-size: 2.5vw">Status: SSH Connected <br> (Job Expired)</div>`
             return
         }
-        var timer_elt = document.getElementById("timer")
+        var check_timer_elt = document.getElementById("timer")
+        if (!(check_timer_elt instanceof HTMLElement)) { throw new Error("Not an HTMLElement"); }
+        var timer_elt = check_timer_elt;
         var now = new Date().getTime()
         var distance = count_down_date - now
 
@@ -263,9 +283,12 @@
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        const form = document.getElementById("ssh_form")
-        /**@type {HTMLFormElement} */
-        const submit_button = document.getElementById('ssh_con_button')
+        const check_form = document.getElementById("ssh_form")
+        if (!(check_form instanceof HTMLElement)) { throw new Error("Not an HTMLElement"); }
+        const form = check_form
+        const check_submit_button = document.getElementById('ssh_con_button')
+        if (!(check_submit_button instanceof HTMLButtonElement)) { throw new Error("Not an HTMLButtonElement"); }
+        const submit_button = check_submit_button
         const inputs = form.querySelectorAll('input');
 
         function checkFormValidity() {
@@ -302,8 +325,15 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('main_form');
-        const submit_button = document.getElementById('main_form_submit_button');
+        if (!(form instanceof HTMLElement)) { throw new Error("Not an HTMLElement"); }
+
+        const submit_button_to_check = document.getElementById('main_form_submit_button');
+        if (!(submit_button_to_check instanceof HTMLButtonElement)) { throw new Error("Not an HTMLButtonElement"); }
+        const submit_button = submit_button_to_check;
+
         const inputs = form.querySelectorAll('input');
+        if (!(inputs instanceof NodeList)) { throw new Error("Not a NodeList"); }
+
 
         // Function to check if all inputs are valid
         function checkFormValidity() {

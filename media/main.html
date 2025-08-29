@@ -201,7 +201,6 @@
 		label {
 			font-size: calc(min(3.75vw, 11pt))
 		}
-
 	</style>
 
 </head>
@@ -217,7 +216,7 @@
 				<div class="flex_form">
 					<div class="flex_vert" style="width:70%">
 						<label>Username@Host:</label>
-						<input style="-webkit-text-security: disc" type="text" placeholder="username@login.node.host" id="username_at_host"
+						<input type="text" placeholder="username@login.node.host" id="username_at_host"
 							pattern="\w+@[\.\w]+" required>
 					</div>
 					<div class="flex_vert" style="width:30%">
@@ -226,7 +225,7 @@
 					</div>
 				</div>
 				<!-- <div class="flex_form"> -->
-					<input type="submit" id="ssh_con_button" style="margin: 4px 0px" disabled="true" value="Connect To SSH">
+				<input type="submit" id="ssh_con_button" style="margin: 4px 0px" disabled="true" value="Connect To SSH">
 				<!-- </div> -->
 			</form>
 
@@ -248,7 +247,7 @@
 				</div>
 				<div class="flex_vert" style="width:50%" required>
 					<label>SLURM Account:</label>
-					<input style="-webkit-text-security: disc" type="text" placeholder="my_slurm_account" id="account" required>
+					<input type="text" placeholder="my_slurm_account" id="account" required>
 				</div>
 			</div>
 			<label>Runtime Request:</label>
@@ -322,7 +321,7 @@
 			<!-- <span style="font-size: 14pt; color: grey; font-style: italic;"> -->
 		</div>
 	</form>
-	<input type="submit" id="submit_job_button" value="Submit Job" style="margin: 4px 0px; font-weight: 700;">
+	<input type="submit" id="submit_job_button" value="Submit Job" style="margin: 10px 0px; font-weight: 700;">
 
 </body>
 
