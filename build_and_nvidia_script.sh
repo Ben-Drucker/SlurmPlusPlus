@@ -1,4 +1,6 @@
-apptainer build --sandbox tunneller-support-latest.sif docker://benndrucker/tunneller-support:latest &&
+#!/bin/bash
+
+apptainer build --sandbox tunneller-support-latest.sif docker://benndrucker/$1 &&
     cd tunneller-support-latest.sif &&
     cp /usr/bin/nvidia-smi ./usr/bin/ &&
     cp /usr/bin/nvidia-debugdump ./usr/bin/ &&
