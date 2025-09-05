@@ -1,5 +1,5 @@
 # Welcome to SLURM++!
-## VS Code Marketplace Link: (https://marketplace.visualstudio.com/items?itemName=slurmtools.SLURMPlusPlus)
+### VS Code Marketplace Link: https://marketplace.visualstudio.com/items?itemName=slurmtools.SLURMPlusPlus
 ## Background and Introduction
 
 A. Several high performance computing (HPC) clusters (think, supercomputers) use [SLURM](https://slurm.schedmd.com/documentation.html), a suite of shell commands, to allow users to request computation resources in an equitable way.
